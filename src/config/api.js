@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 import C from "../config/constant"
 
-const client = (token = null) => {console.log(cookie.load(C.COOKIE.CSRF))
+const client = (token = null) => {
   const defaultOptions = {
     headers: token
       ? {

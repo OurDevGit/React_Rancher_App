@@ -1,59 +1,31 @@
-import * as React from 'react'
-import * as images from '../../exampleAssets'
+import React from "react";
+import { useDispatch } from "react-redux";
 
-import {
-  TopBar,
-  TopBarSection,
-  TopBarTitle,
-  Select,
-} from '@duik/it'
+import { TopBar, TopBarSection, TopBarTitle, Button } from "@duik/it";
+import { LogoutOutlined } from "@ant-design/icons";
+import { userLogOutRequest } from "../../actions/user";
 
-import cls from './styles.module.scss'
+import "./styles.scss";
 
+const Header = (props) => {
+  const dispatch = useDispatch();
+  const handleLogOut = async () => {
+    await dispatch(userLogOutRequest());
+    props.history.push('/login');
+  };
+  return (
+    <TopBar {...props}>
+      <TopBarSection>
+        <TopBarTitle large>Dashboard</TopBarTitle>
+      </TopBarSection>
+      <TopBarSection>
+        <Button primary onClick={handleLogOut}>
+          <LogoutOutlined />
+          Log out
+        </Button>
+      </TopBarSection>
+    </TopBar>
+  );
+};
 
-const Header = props => (
-  <TopBar { ...props }>
-    <TopBarSection>
-      <TopBarTitle large>
-        Dashboard
-      </TopBarTitle>
-    </TopBarSection>
-    <TopBarSection>
-
-      <Select
-        defaultValue={ ['english'] }
-        options={ [
-          {
-            value: 'english',
-            label: (
-              <span>
-                <img
-                  alt="english"
-                  className={ cls.selectFlag }
-                  src={ images.flag01 }
-                />
-                ENG
-              </span>
-            ),
-          },
-          {
-            value: 'english2',
-            label: (
-              <span>
-                <img
-                  alt="english"
-                  className={ cls.selectFlag }
-                  src={ images.flag01 }
-                />
-                ENG 2
-              </span>
-            ),
-          },
-        ] }
-        placeholder="Action"
-      />
-    </TopBarSection>
-  </TopBar>
-)
-
-export default Header
+export default Header;

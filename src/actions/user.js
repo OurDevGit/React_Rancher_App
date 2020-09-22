@@ -14,18 +14,6 @@ const setLoginSuccess = (isLoginSuccess, currentUser) => {
   };
 };
 
-export const loadMe = () => {
-  return async (dispatch) => {
-    const client = Client();
-    try {
-      const res = await client.get(`${endpoint}/v3/users?me=true`);
-      dispatch(setLoginSuccess(true, res.data.data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
-
 export const setLoginStatus = (error, loginLoading = false) => {
   return {
     type: "SET_LOGIN_STATUS",
@@ -34,12 +22,26 @@ export const setLoginStatus = (error, loginLoading = false) => {
   };
 };
 
+export const loadMe = () => {
+  return async (dispatch) => {
+    const client = Client();
+    try {
+      const res = await client.get(`${endpoint}/v3/users?me=true`);
+      if (res.data.data && res.data.data.length > 0) {
+        dispatch(setLoginSuccess(true, res.data.data[0]));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
 // User Log in
 // -----------------------------------------------------------------------------
 export const userLoginRequest = (url, userInfo) => {
   const body = {
     description: C.SESSION.DESCRIPTION,
-    responseType: "json",
+    responseType: "cookie",
     ttl: C.SESSION.TTL,
     username: userInfo.username,
     password: userInfo.password,
@@ -49,31 +51,30 @@ export const userLoginRequest = (url, userInfo) => {
     dispatch(setLoginStatus(null, true));
     const client = Client();
     try {
-      const res = await client.post(url, body);
+      await client.post(url, body);
       dispatch(setLoginStatus(null, false));
-      cookie.save(C.COOKIE.TOKEN, res.data.token)
-      return res.data
     } catch (err) {
-      dispatch(setLoginStatus(err.false));
+      dispatch(setLoginStatus(err, false));
     }
   };
 };
 
-const logOutSucess = () => {
+const logOutSuccess = () => {
   cookie.remove();
   return {
     type: "USER_LOGOUT",
   };
 };
 
-export const logOutRequest = () => {
+export const userLogOutRequest = () => {
   return async (dispatch) => {
     const client = Client(cookie.load(C.COOKIE.TOKEN));
     try {
       await client.post(`${endpoint}/v3/tokens?action=logout`);
-      dispatch(logOutSucess());
+      dispatch(logOutSuccess());
     } catch (err) {
       console.log(err);
+      dispatch(setLoginStatus(err, false));
     }
   };
 };

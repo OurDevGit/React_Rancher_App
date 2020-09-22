@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
 } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loadSettings } from "./actions/settings";
 import { loadMe } from "./actions/user";
 import { loadLocales } from "./actions/language";
@@ -20,12 +20,9 @@ import "@duik/icon/dist/styles.css";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(loadSettings());
-      dispatch(loadLocales("en-us", "vmaster-dev"));
-      dispatch(loadMe());
-    };
-    fetchData();
+    dispatch(loadSettings());
+    dispatch(loadLocales("en-us", "vmaster-dev"));
+    dispatch(loadMe());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

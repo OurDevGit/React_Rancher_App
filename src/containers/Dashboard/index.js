@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   ContainerVertical,
   ContainerHorizontal,
@@ -37,14 +37,12 @@ const tabItems = [
   },
 ];
 
-const Dashboard = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const [isLoggedIn, setIsLoggedIn] = useState(user.isLoginSuccess);
-
+const Dashboard = (props) => {
+  const isLoggedIn = useSelector((state) => state.user.isLoginSuccess);
   useEffect(() => {
-    if (!isLoggedIn) return <Redirect to="/login" />;
-  }, [user]);
+    if (!isLoggedIn) props.history.push("/login");
+  }, [isLoggedIn, props]);
+
   return (
     <ContainerHorizontal>
       <NavigationTablet />
@@ -64,7 +62,7 @@ const Dashboard = () => {
             </TabItem>
           ))}
         </TabContainer>
-        <Header />
+        <Header history={props.history} />
       </ContainerVertical>
     </ContainerHorizontal>
   );

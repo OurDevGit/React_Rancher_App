@@ -4,9 +4,15 @@ import { Link } from "react-router-dom";
 import { Button, Checkbox } from "@duik/it";
 import Icon from "@duik/icon";
 import { Spin, Select, Form, Input } from "antd";
-import { UserOutlined, LockOutlined, LoadingOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LockOutlined,
+  LoadingOutlined,
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+} from "@ant-design/icons";
 
-import { logOutRequest, userLoginRequest } from "../../../actions/user";
+import { userLoginRequest, loadMe } from "../../../actions/user";
 
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import "./styles.scss";
@@ -19,30 +25,41 @@ const Login = (props) => {
   const settings = JSON.parse(localStorage.getItem("settings"));
   const dispatch = useDispatch();
   const providers = useSelector((state) => state.settings.providers);
+  const loginLoading = useSelector((state) => state.user.loginLoading);
+  const isLoginSuccess = useSelector((state) => state.user.isLoginSuccess);
+  const loginError = useSelector((state) => state.user.loginError);
   const [loginLink, setLoginLink] = useState(settings?.providerLoginLink);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
-
-  useEffect(() => {
-    if (providers.length > 0) setLoginLink(providers[0].actions.login);
-  }, [providers]);
+  const [error, setError] = useState(null);
 
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    await dispatch(userLoginRequest(loginLink, values)).then(res => {
-      console.log("login result=>>>>>>", res)
-    })
-
     setIsLoadingLogin(true);
-    setTimeout(() => {
-      setIsLoadingLogin(false);
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        props.history.push("/Dashboard");
-      }, 1000);
-    }, 2000);
+    await dispatch(userLoginRequest(loginLink, values));
+    setIsLoading(true);
+    await dispatch(loadMe());
+    props.history.push("/Dashboard");
   };
+
+  useEffect(() => {
+    if (providers.length > 0) setLoginLink(providers[0].actions.login);
+  }, [providers, loginError]);
+
+  useEffect(() => {
+    setIsLoadingLogin(loginLoading);
+    if (loginError) {
+      setIsLoading(false);
+      setError(
+        "Logging in failed: Check credentials, or your account may not be authorized to log in."
+      );
+    }
+  }, [loginLoading, loginError]);
+
+  useEffect(() => {
+    setIsLoading(false);
+    setError(null);
+  }, [isLoginSuccess]);
 
   const LoginForm = () => (
     <div className="login">
@@ -81,7 +98,9 @@ const Login = (props) => {
           <Input.Password
             label="Password"
             prefix={<LockOutlined className="site-form-item-icon" />}
-            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
             type="password"
             placeholder="Password"
             style={{ borderRadius: 5 }}
@@ -114,10 +133,12 @@ const Login = (props) => {
               Logging In...
             </Button>
           )}
-           {/* <Button success className="login-form-button" onClick={() => dispatch(logOutRequest())}>
-              Log out
-            </Button> */}
         </Form.Item>
+        {error && (
+          <Form.Item>
+            <div className="login-form-error">{error}</div>
+          </Form.Item>
+        )}
       </Form>
     </div>
   );

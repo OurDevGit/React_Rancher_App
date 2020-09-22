@@ -42,6 +42,17 @@
   .login-form-button {
     width: 100%;
   }
+  .login-form-error {
+    display: table;
+    position: relative;
+    transition: all 0.2s ease;
+    padding: 10px !important;
+    width: 100%;
+    background: #fef8f8;
+    border: solid 1px #f36b6b;
+    color: #f15354;
+    text-align: center;
+  }
 }
 .ant-input {
   height: 30px;
@@ -51,5 +62,5 @@
   font-size: 20;
   color: #ffffff;
   font-weight: bold;
-  margin: 0 8px 8px 0
+  margin: 0 8px 8px 0;
 }
