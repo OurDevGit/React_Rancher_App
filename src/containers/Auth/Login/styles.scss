@@ -1,0 +1,55 @@
+.background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.login {
+  background-color: #ffffff;
+  opacity: 0.95;
+  border-radius: 10px;
+  margin: calc((100vh - 500px) / 2) auto 0 auto;
+  padding: 40px 40px 20px 40px;
+  max-width: 440px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(61, 61, 61, 0.25);
+
+  .logo-wrapper {
+    img {
+      height: 100px;
+    }
+  }
+
+  .language-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .login-form {
+    padding: 20px;
+  }
+  .login-form-actions {
+    display: flex;
+    justify-content: space-between;
+    .ant-form-item-control-input-content {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .login-form-button {
+    width: 100%;
+  }
+}
+.ant-input {
+  height: 30px;
+}
+
+.loading-indicator {
+  font-size: 20;
+  color: #ffffff;
+  font-weight: bold;
+  margin: 0 8px 8px 0
+}

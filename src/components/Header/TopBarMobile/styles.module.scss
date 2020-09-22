@@ -1,0 +1,26 @@
+@import '../../../styles/common/variables.scss';
+
+.wrapper {
+  background: $primary !important;
+  
+  * {
+    color: white;
+  }
+  .logo {
+    color: white;
+  }
+
+  input {
+    color: white;
+    &::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+  }
+  .inputWrapper {
+    flex-grow: 1;
+    // padding: 0;
+  }
+  @media screen and (min-width: 769px) {
+    display: none !important;
+  }
+}

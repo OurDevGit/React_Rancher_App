@@ -1,0 +1,46 @@
+@import '../../../styles/common/variables.scss';
+.wrapper {
+  font-size: .875rem;
+  color: $textMain;
+  display: block;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: $borderDefault;
+  .text {
+    display: flex;
+    align-items: center;
+  }
+  .icon {
+    display: inline-block;
+    margin-right: 12px;
+    color: $textSecondary;
+    width: 18px;
+    text-align: center;
+    font-size: 20px;
+  }
+  .rightEl {
+    font-size: 0.75rem;
+    color: $textSecondary;
+    line-height: 1rem;
+  }
+  &.highlighted {
+    .text{
+      font-weight: 500;
+      color: $textMain;
+    }
+  }
+  // active
+  &:global(.active) {
+    font-weight: 500;
+    .icon {
+      color: $primary;
+    }
+  }
+  &:hover {
+    .icon {
+      color: rgba($primary, .8);
+    }
+  }
+}

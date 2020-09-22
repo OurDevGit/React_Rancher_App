@@ -1,0 +1,10 @@
+@import "./base/base.scss";
+
+// import common styles
+@import "./common/colors";
+@import "./common/variables";
+@import "./common/fonts";
+
+// import ant design style
+@import "~antd/dist/antd.css";
+@import "~antd/dist/antd.min.css";
