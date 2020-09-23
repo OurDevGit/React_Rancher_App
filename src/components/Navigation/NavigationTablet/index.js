@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import * as images from "../../../exampleAssets";
 import { NavUser, NavLinkTwoContainer, NavLinkTwo } from "../../NavComponents";
 import {
@@ -11,39 +12,72 @@ import {
   ContainerVertical,
   ScrollArea,
 } from "@duik/it";
-import Icon from "@duik/icon";
-import cls from "./styles.module.scss";
+
+import {
+  GlobalOutlined,
+  ClusterOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+  SecurityScanOutlined,
+  ToolOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
+
+import { setHeaderTitle } from "../../../actions/settings";
+
+import "./styles.scss";
+
+import logoImg from "../../../assets/img/DeltaDevOps.png";
 
 const menuLinks = [
   {
-    text: "Dashboard",
-    icon: "gallery_grid_view",
+    text: "Global",
+    icon: <GlobalOutlined />,
+    isDropdown: false,
   },
   {
-    text: "Calendar",
-    icon: "calendar",
+    text: "Clusters",
+    icon: <ClusterOutlined />,
+    isDropdown: false,
   },
   {
-    text: "Inbox",
-    icon: "inbox_paper_round",
+    text: "Apps",
+    icon: <AppstoreOutlined />,
+    isDropdown: false,
   },
   {
-    text: "Invoicing",
-    icon: "money_round",
+    text: "Settings",
+    icon: <SettingOutlined />,
+    isDropdown: false,
   },
   {
-    text: "Lab / Experimental",
-    icon: "container",
+    text: "Security",
+    icon: <SecurityScanOutlined />,
+    isDropdown: true,
+  },
+  {
+    text: "Tools",
+    icon: <ToolOutlined />,
+    isDropdown: true,
   },
 ];
-
 const Navigation = () => {
+  const dispatch = useDispatch();
+  const [currentItem, setCurrentItem] = useState("Clusters");
+  const handleNavItemClick = (item) => {
+    if (!item.isDropdown) {
+      setCurrentItem(item.text);
+      dispatch(setHeaderTitle(item.text))
+    }
+  };
   return (
-    <NavPanel className={cls.wrapper}>
+    <NavPanel className="navigation-wrapper">
       <ContainerVertical>
-        <TopBar className={cls.navigation_topBar}>
+        <TopBar className="navigation-topbar">
           <TopBarSection>
-            <Icon>home</Icon>
+            <div className="navigation-logo">
+              <img src={logoImg} alt="" />
+            </div>
           </TopBarSection>
         </TopBar>
         <ScrollArea>
@@ -56,11 +90,13 @@ const Navigation = () => {
             {menuLinks.map((link) => (
               <NavLinkTwo
                 key={link.text}
-                className={link.text === "Dashboard" ? "active" : null}
-                icon={<Icon>{link.icon}</Icon>}
+                className={link.text === currentItem ? "active" : null}
+                icon={link.icon}
                 highlighted
+                rightEl={link.isDropdown ? <DownOutlined /> : null}
+                onClick={() => handleNavItemClick(link)}
               >
-                <strong>{link.text}</strong>
+                {link.text}
               </NavLinkTwo>
             ))}
           </NavLinkTwoContainer>

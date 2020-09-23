@@ -15,6 +15,11 @@ const setProviders = (providers) => {
   return { type: "SET_PROVIDERS", providers };
 };
 
+export const setHeaderTitle = (title) => {
+  return { type: "SET_HEADER_TITLE", title };
+};
+
+
 export const loadSettings = () => {
   return async (dispatch) => {
     const client = Client();

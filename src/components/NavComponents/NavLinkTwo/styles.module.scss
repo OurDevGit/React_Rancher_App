@@ -13,7 +13,7 @@
     align-items: center;
   }
   .icon {
-    display: inline-block;
+    display: flex;
     margin-right: 12px;
     color: $textSecondary;
     width: 18px;
@@ -33,7 +33,10 @@
   }
   // active
   &:global(.active) {
-    font-weight: 500;
+    .text{
+      font-weight: 600;
+      color: $primary;
+    }
     .icon {
       color: $primary;
     }

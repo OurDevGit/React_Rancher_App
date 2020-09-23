@@ -57,8 +57,10 @@ const Login = (props) => {
   }, [loginLoading, loginError]);
 
   useEffect(() => {
-    setIsLoading(false);
-    setError(null);
+    if (isLoginSuccess) {
+      setIsLoading(false);
+      setError(null);
+    }
   }, [isLoginSuccess]);
 
   const LoginForm = () => (

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import cookies from "react-cookies";
 import { Link } from "react-router-dom";
 import {
   ContainerVertical,
@@ -7,41 +8,54 @@ import {
   TabContainer,
   TabItem,
 } from "@duik/it";
-import Icon from "@duik/icon";
+
 import Header from "../../components/Header";
 import NavigationTablet from "../../components/Navigation/NavigationTablet";
 import TopBarMobile from "../../components/Header/TopBarMobile";
-
+import {
+  GlobalOutlined,
+  ClusterOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+  SecurityScanOutlined,
+  ToolOutlined,
+} from "@ant-design/icons";
 import cls from "./styles.module.scss";
 
 const tabItems = [
   {
-    to: "/",
-    content: <Icon>gallery_grid_view</Icon>,
+    to: "/global",
+    content: <GlobalOutlined />,
   },
   {
-    to: "/calendar",
-    content: <Icon>calendar</Icon>,
+    to: "/cluster",
+    content: <ClusterOutlined />,
   },
   {
-    to: "/inbox",
-    content: <Icon>inbox_paper_round</Icon>,
+    to: "/apps",
+    content: <AppstoreOutlined />,
   },
   {
-    to: "/invocing",
-    content: <Icon>money_round</Icon>,
+    to: "/settings",
+    content: <SettingOutlined />,
   },
   {
-    to: "/lab",
-    content: <Icon>container</Icon>,
+    to: "/security",
+    content: <SecurityScanOutlined />,
+  },  
+  {
+    to: "/tools",
+    content: <ToolOutlined />,
   },
 ];
 
 const Dashboard = (props) => {
+  const cookieLoginStatus = JSON.parse(cookies.load("isLoggedIn"));
   const isLoggedIn = useSelector((state) => state.user.isLoginSuccess);
+
   useEffect(() => {
-    if (!isLoggedIn) props.history.push("/login");
-  }, [isLoggedIn, props]);
+    if (!isLoggedIn && !cookieLoginStatus) props.history.push("/login");
+  }, [isLoggedIn, cookieLoginStatus, props]);
 
   return (
     <ContainerHorizontal>
@@ -56,7 +70,8 @@ const Dashboard = (props) => {
               className={cls.mobileItem}
               Component={Link}
               size="smaller"
-              to={`${item.to}`}
+              // to={`${item.to}`}
+              to="#"
             >
               {item.content}
             </TabItem>

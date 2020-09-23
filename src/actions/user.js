@@ -29,9 +29,11 @@ export const loadMe = () => {
       const res = await client.get(`${endpoint}/v3/users?me=true`);
       if (res.data.data && res.data.data.length > 0) {
         dispatch(setLoginSuccess(true, res.data.data[0]));
+        cookie.save("isLoggedIn", true);
       }
     } catch (err) {
       console.log(err);
+      cookie.save("isLoggedIn", false);
     }
   };
 };
@@ -61,6 +63,7 @@ export const userLoginRequest = (url, userInfo) => {
 
 const logOutSuccess = () => {
   cookie.remove();
+  cookie.save("isLoggedIn", false)
   return {
     type: "USER_LOGOUT",
   };

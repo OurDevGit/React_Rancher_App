@@ -1,17 +1,7 @@
-import * as React from 'react'
-import classnames from 'classnames'
+import * as React from "react";
+import classnames from "classnames";
 
-import cls from './styles.module.scss'
-
-
-type NavLinkTwoProps = {
-  className?: ?String,
-  children?: ?React.Node,
-  rightEl?: ?React.Node,
-  highlighted?: ?Boolean,
-  icon?: React.Node,
-  Component?: React.ElementType
-}
+import cls from "./styles.module.scss";
 
 const NavLinkTwo = ({
   rightEl,
@@ -21,30 +11,20 @@ const NavLinkTwo = ({
   icon,
   Component,
   ...rest
-}: NavLinkTwoProps) => (
+}) => (
   <Component
-    className={ classnames(cls.wrapper, className, {
+    className={classnames(cls.wrapper, className, {
       [cls.highlighted]: highlighted,
-    }) }
-    { ...rest }
+    })}
+    {...rest}
   >
-    <span className={ cls.text }>
-      {
-        icon && (
-        <span className={ cls.icon }>
-          {icon}
-        </span>
-        )
-      }
+    <span className={cls.text}>
+      {icon && <span className={cls.icon}>{icon}</span>}
       {children}
     </span>
-    {rightEl && (
-    <span className={ cls.rightEl }>
-      {rightEl}
-    </span>
-    )}
+    {rightEl && <span className={cls.rightEl}>{rightEl}</span>}
   </Component>
-)
+);
 
 NavLinkTwo.defaultProps = {
   className: null,
@@ -52,7 +32,7 @@ NavLinkTwo.defaultProps = {
   highlighted: false,
   icon: null,
   children: null,
-  Component: 'a',
-}
+  Component: "a",
+};
 
-export default NavLinkTwo
+export default NavLinkTwo;

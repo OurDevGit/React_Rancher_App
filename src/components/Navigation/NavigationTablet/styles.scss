@@ -1,0 +1,15 @@
+.navigation-wrapper {
+  display: none;
+
+  .navigation-topbar {
+    justify-content: center;
+  }
+  .navigation-logo {
+    img {
+      height: 48px;
+    }
+  }
+  @media screen and (min-width: 769px) {
+    display: block;
+  }
+}
