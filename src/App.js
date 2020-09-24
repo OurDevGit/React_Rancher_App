@@ -12,6 +12,8 @@ import { loadLocales } from "./actions/language";
 
 import Login from "./containers/Auth/Login";
 import Dashboard from "./containers/Dashboard";
+import Apps from "./containers/Apps";
+import Settings from "./containers/Settings";
 
 import "./styles/index.scss";
 import "@duik/it/dist/styles.css";
@@ -32,6 +34,8 @@ const App = () => {
         <Switch>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/login" component={Login} />
+          <Route path="/apps" component={Apps} />
+          <Route path="/settings" component={Settings} />
           <Redirect to="/login" />
         </Switch>
       </div>

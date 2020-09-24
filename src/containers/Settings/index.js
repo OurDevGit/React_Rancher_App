@@ -50,17 +50,17 @@ const tabItems = [
   },
 ];
 
-const Dashboard = (props) => {
+const Settings = (props) => {
   const cookieLoginStatus = JSON.parse(cookies.load("isLoggedIn"));
   const isLoggedIn = useSelector((state) => state.user.isLoginSuccess);
-  const headerTitle = useSelector((state) => state.settings.headerTitle);
+
   useEffect(() => {
     if (!isLoggedIn && !cookieLoginStatus) props.history.push("/login");
   }, [isLoggedIn, cookieLoginStatus, props]);
 
   return (
     <ContainerHorizontal>
-      <NavigationTablet active="Clusters" />
+      <NavigationTablet active="Settings" />
       <ContainerVertical>
         <TopBarMobile />
         <TabContainer className="mobileNavigation">
@@ -77,9 +77,9 @@ const Dashboard = (props) => {
             </TabItem>
           ))}
         </TabContainer>
-        <Header history={props.history} title="Clusters" />
+        <Header history={props.history} title="Settings" />
       </ContainerVertical>
     </ContainerHorizontal>
   );
 };
-export default Dashboard;
+export default Settings;

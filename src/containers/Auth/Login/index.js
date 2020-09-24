@@ -39,7 +39,7 @@ const Login = (props) => {
     await dispatch(userLoginRequest(loginLink, values));
     setIsLoading(true);
     await dispatch(loadMe());
-    props.history.push("/Dashboard");
+    
   };
 
   useEffect(() => {
@@ -60,6 +60,7 @@ const Login = (props) => {
     if (isLoginSuccess) {
       setIsLoading(false);
       setError(null);
+      props.history.push("/Dashboard");
     }
   }, [isLoginSuccess]);
 

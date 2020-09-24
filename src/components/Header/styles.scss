@@ -2,3 +2,18 @@
   margin-right: 10px;
   transform: translateX(-3px)
 }
+.userAvatar{
+  padding-right: 30px;
+}
+.userSetting_dropdown{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid grey;
+  text-align: center;
+  cursor: pointer;
+  span{
+    font-size: 12px !important;
+    vertical-align: middle !important;
+  }
+}

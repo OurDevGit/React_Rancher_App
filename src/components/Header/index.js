@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { TopBar, TopBarSection, TopBarTitle } from "@duik/it";
+import * as images from "../../exampleAssets";
+import { TopBar, TopBarSection, TopBarTitle, Avatar } from "@duik/it";
 import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { userLogOutRequest } from "../../actions/user";
+
+import AWS from "aws-sdk/global";
+import Identicon from "identicon.js";
 
 import "./styles.scss";
 
 const Header = (props) => {
   const dispatch = useDispatch();
-  const headerTitle = useSelector((state) => state.settings.headerTitle);
+  // const headerTitle = useSelector((state) => state.settings.headerTitle);
+  const headerTitle = props.title;
+  const user = useSelector((state) => state.user.currentUser);
+  const [ghAvatarSrc, setGhAvatarSrc] = useState("");
+  const [currentUserName, setCurrentUserName] = useState();
   const handleMenuClick = (e) => {
     if (e.key === "5") dispatch(userLogOutRequest());
     console.log(e.key);
@@ -30,21 +37,59 @@ const Header = (props) => {
     </Menu>
   );
 
+  useEffect(() => {
+    if (user && user.id) {
+      const data = AWS.util.crypto.md5(user.id, "hex");
+      const settings = JSON.parse(localStorage.getItem("settings"));
+      const userNameData = {
+        name: user.name,
+        type:
+          settings.provider.charAt(0).toUpperCase() +
+          settings.provider.slice(1) +
+          " " +
+          user.type.charAt(0).toUpperCase() +
+          user.type.slice(1),
+        userName: user.username,
+      };
+      setGhAvatarSrc(
+        `data:image/png;base64,${new Identicon(data, 80, 0.01).toString()}`
+      );
+      setCurrentUserName(userNameData);
+    }
+  }, [user]);
+
+
   return (
     <TopBar {...props}>
       <TopBarSection>
         <TopBarTitle large>{headerTitle}</TopBarTitle>
       </TopBarSection>
       <TopBarSection>
-        <Dropdown overlay={menu}>
-          <div
-            className="ant-dropdown-link"
-            onClick={(e) => e.preventDefault()}
-            to="#"
-          >
-            User Settings <DownOutlined />
-          </div>
-        </Dropdown>
+        {user && user.id ?
+          <>
+            <Avatar
+              imgUrl={ghAvatarSrc !== "" ? ghAvatarSrc : images.a21}
+              name={
+                currentUserName
+                  ? currentUserName.name + `(${currentUserName.userName})`
+                  : "User"
+              }
+              textBottom={currentUserName ? currentUserName.type : "user"}
+              className="userAvatar"
+            />
+            <Dropdown overlay={menu} className="userSetting_dropdown">
+              <div
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+                to="#"
+              >
+                <DownOutlined />
+              </div>
+            </Dropdown>
+          </>
+          : null
+        }
+
       </TopBarSection>
     </TopBar>
   );

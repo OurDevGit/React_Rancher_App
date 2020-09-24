@@ -6,9 +6,11 @@
     "@duik/icon": "^0.6.0",
     "@duik/it": "^0.6.0",
     "antd": "^4.6.4",
+    "aws-sdk": "^2.758.0",
     "axios": "^0.19.0",
     "classnames": "^2.2.6",
     "history": "^4.10.1",
+    "identicon.js": "^2.3.3",
     "node-sass": "^4.12.0",
     "react": "^16.10.2",
     "react-cookies": "^0.1.1",
@@ -42,5 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://118.99.98.159:30443"
+  "proxy": "https://144.202.127.126/"
 }

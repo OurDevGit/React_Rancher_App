@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: $borderDefault;
+  padding: 0 30px;
   .text {
     display: flex;
     align-items: center;
@@ -33,6 +34,8 @@
   }
   // active
   &:global(.active) {
+    box-shadow: inset 3px 0 0 0 $primary;
+    background: rgba(84,147,245,.05);
     .text{
       font-weight: 600;
       color: $primary;
@@ -42,6 +45,7 @@
     }
   }
   &:hover {
+    background: rgba(84,147,245,.05);
     .icon {
       color: rgba($primary, .8);
     }
