@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as images from "../../exampleAssets";
-import { TopBar, TopBarSection, TopBarTitle, Avatar } from "@duik/it";
+import { TopBar, TopBarSection, TopBarTitle, Avatar, TextField } from "@duik/it";
+import Icon from '@duik/icon'
 import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { userLogOutRequest } from "../../actions/user";
-
+import ReactFlagsSelect from 'react-flags-select';
+import 'react-flags-select/scss/react-flags-select.scss';
 import AWS from "aws-sdk/global";
 import Identicon from "identicon.js";
 
@@ -62,11 +64,27 @@ const Header = (props) => {
   return (
     <TopBar {...props}>
       <TopBarSection>
-        <TopBarTitle large>{headerTitle}</TopBarTitle>
+        <TopBarTitle large>
+          {headerTitle}
+        </TopBarTitle>
+        <TopBarTitle large>
+          <TextField
+            leftEl={<Icon>search_left</Icon>}
+            placeholder="Search..."
+          />
+        </TopBarTitle>
+
       </TopBarSection>
+
       <TopBarSection>
         {user && user.id ?
           <>
+
+            <ReactFlagsSelect
+              countries={["US", "GB", "DE", "IT"]}
+              customLabels={{ "US": "English(EN-US)", "GB": "English(EN-GB)", "DE": "Deutsch(DE-DE)", "IT": "Italiano(IT-IT)" }}
+              placeholder="Select Language"
+              defaultCountry="US" />
             <Avatar
               imgUrl={ghAvatarSrc !== "" ? ghAvatarSrc : images.a21}
               name={

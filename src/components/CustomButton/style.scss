@@ -1,0 +1,29 @@
+.customButton{
+    background-color: white;
+    padding: 10px 0;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease-in-out;
+    .left-image{
+        padding: 10px;
+        margin: auto;
+    }
+    .right-label{
+        margin: 10px;
+        font-size: 1rem;
+        
+        cursor: pointer;
+        text-transform: none;
+        p:first-of-type{
+            color: #3497da;
+        }
+    }
+}
+.customButton:hover{
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    .right-label{
+        color: #3497da;
+    }
+}

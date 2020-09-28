@@ -1,0 +1,19 @@
+.Add_Cluster_Form{
+    padding: 30px;
+    .ant-collapse-borderless>.ant-collapse-item{
+        box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.15);
+        transition: box-shadow 0.3s ease-in-out;
+        margin-bottom: 20px;
+        border-radius: 5px !important;
+        background-color: white;
+    }
+    .ant-collapse-borderless>.ant-collapse-item:hover{
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .ant-collapse-borderless>.ant-collapse-item>.ant-collapse-content{
+        background-color: white;
+    }
+    .sm_button{
+        max-width: 100px;
+    }
+}

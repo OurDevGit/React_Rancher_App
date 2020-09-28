@@ -269,9 +269,9 @@ const Navigation = (props) => {
           </NavLinkTwoContainer>
           <NavSection>
             <NavLink onClick={versionInfo}>v2.4.8</NavLink>
-            <Dropdown overlay={menuLanguage}>
+            {/* <Dropdown overlay={menuLanguage}>
               <NavLink rightEl={<DownOutlined />}>English</NavLink>
-            </Dropdown>
+            </Dropdown> */}
             <Dropdown overlay={menuDownload}>
               <NavLink rightEl={<DownOutlined />}>Download CLI</NavLink>
             </Dropdown>

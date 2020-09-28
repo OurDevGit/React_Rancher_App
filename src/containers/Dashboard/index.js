@@ -13,6 +13,7 @@ import {
 import Header from "../../components/Header";
 import NavigationTablet from "../../components/Navigation/NavigationTablet";
 import TopBarMobile from "../../components/Header/TopBarMobile";
+import ClusterList from "./ClusterList"
 import {
   GlobalOutlined,
   ClusterOutlined,
@@ -54,9 +55,9 @@ const Dashboard = (props) => {
   const cookieLoginStatus = JSON.parse(cookies.load("isLoggedIn"));
   const isLoggedIn = useSelector((state) => state.user.isLoginSuccess);
   const headerTitle = useSelector((state) => state.settings.headerTitle);
-  useEffect(() => {
-    if (!isLoggedIn && !cookieLoginStatus) props.history.push("/login");
-  }, [isLoggedIn, cookieLoginStatus, props]);
+  // useEffect(() => {
+  //   if (!isLoggedIn && !cookieLoginStatus) props.history.push("/login");
+  // }, [isLoggedIn, cookieLoginStatus, props]);
 
   return (
     <ContainerHorizontal>
@@ -78,6 +79,7 @@ const Dashboard = (props) => {
           ))}
         </TabContainer>
         <Header history={props.history} title="Clusters" />
+        <ClusterList />
       </ContainerVertical>
     </ContainerHorizontal>
   );
