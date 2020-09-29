@@ -1,25 +1,172 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Collapse } from 'antd';
+import { Collapse, Table } from 'antd';
+import * as images from "../../../../exampleAssets";
 
-
-import { TopBar, TopBarSection, TopBarTitle, FormGroupContainer, FormGroup, Divider, TextArea, TextField, Button } from "@duik/it";
-import { CaretRightOutlined } from '@ant-design/icons';
+import { ContainerHorizontal, FormGroupContainer, FormGroup, Divider, TextField, Avatar, TextArea } from "@duik/it";
+import { Select, Radio, InputNumber, Tooltip, Alert, Input, Upload, message, Button } from 'antd';
+import { CaretRightOutlined, MinusOutlined, QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons';
 import Icon from '@duik/icon'
 
+import AWS from "aws-sdk/global";
+import Identicon from "identicon.js";
+
 import "./style.scss"
+
+const CollapseHeader = (props) => {
+  return (
+    <div className="collapse_header">
+      <h6 className="collapse_header_title">{props.title}</h6>
+      <p className="collapse_header_description">{props.description}</p>
+    </div>
+  )
+};
+
+const InputGroups = (props) => {
+  return (
+    <FormGroupContainer className="inputGroups" horizontal>
+      <FormGroup>
+        <TextField label={props.index == 0 ? "Key *" : ""} placeholder="e.g. foo" value={props.key_val} onChange={() => props.handleChange} />
+      </FormGroup>
+      <p className={props.index == 0 ? "equal first" : "equal"}> = </p>
+      <FormGroup>
+        <TextField label={props.index == 0 ? "Value *" : ""} placeholder="e.g. bar" value={props.value_val} onChange={() => props.handleChange} />
+      </FormGroup>
+      <Button square primary className={props.index == 0 ? "minus_button first" : "minus_button"} onClick={props.handleRemove}>
+        <MinusOutlined />
+      </Button>
+    </FormGroupContainer>
+  )
+};
+
 const AddCustom = (props) => {
   const { Panel } = Collapse;
+  const { Option } = Select;
+  const user = useSelector((state) => state.user.currentUser);
+  const [ghAvatarSrc, setGhAvatarSrc] = useState("");
+  const [currentUserName, setCurrentUserName] = useState();
+  const [labelArray, setLabelArrary] = useState([]);
+  const [annotationArray, setAnnotationArray] = useState([]);
+  const [labels, setLabels] = useState();
+  const [annotations, setAnnotations] = useState();
+  const [labelCount, setLabelCount] = useState(0);
+  const [annotationCount, setAnnotationCount] = useState(0);
+  const handleAddAnnotation = () => {
+    setAnnotationArray([...annotationArray, { key: "", value: "" }])
 
-  const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+  }
+  const handleAddLabel = () => {
+    setLabelArrary([...labelArray, { key: "", value: "" }]);
+  }
 
-  const [addStep, setAddStep] = useState("select-type");
+  const handleRemoveLabel = (index) => {
+    labelArray.splice(index, 1);
+    setLabelArrary(labelArray);
+    setLabelCount(labelArray.length);
+  }
+
+  const handleRemoveAnnotation = (index) => {
+    annotationArray.splice(index, 1);
+    setAnnotationArray(annotationArray);
+    setAnnotationCount(annotationArray.length);
+  }
+
+  function handleChange(value) {
+    console.log(`selected ${value}`);
+  }
+
+  useEffect(() => {
+    if (user && user.id) {
+      const data = AWS.util.crypto.md5(user.id, "hex");
+      const settings = JSON.parse(localStorage.getItem("settings"));
+      const userNameData = {
+        name: user.name,
+        type:
+          settings.provider.charAt(0).toUpperCase() +
+          settings.provider.slice(1) +
+          " " +
+          user.type.charAt(0).toUpperCase() +
+          user.type.slice(1),
+        userName: user.username,
+      };
+      setGhAvatarSrc(
+        `data:image/png;base64,${new Identicon(data, 80, 0.01).toString()}`
+      );
+      setCurrentUserName(userNameData);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log("aaaaaaaa", labelArray)
+    const labels_temp = labelArray.map((label, index) =>
+      <InputGroups
+        key={index.toString()}
+        index={index}
+        key_val={label.key}
+        value_val={label.value}
+        handleRemove={() => handleRemoveLabel(index)}
+      />
+    );
+    setLabels(labels_temp);
+  }, [labelArray, labelCount]);
+
+  useEffect(() => {
+    const annotations_temp = annotationArray.map((annotation, index) =>
+      <InputGroups
+        key={index.toString()}
+        index={index}
+        key_val={annotation.key}
+        value_val={annotation.value}
+        handleRemove={() => handleRemoveAnnotation(index)}
+      />);
+    setAnnotations(annotations_temp);
+  }, [annotationArray, annotationCount]);
+
+
+  const members_data = [
+    {
+      key: '1',
+      name:
+        <Avatar
+          imgUrl={ghAvatarSrc !== "" ? ghAvatarSrc : images.a21}
+          name={
+            currentUserName
+              ? currentUserName.name + `(${currentUserName.userName})`
+              : "User"
+          }
+          textBottom={currentUserName ? currentUserName.type : "user"}
+          className="userAvatar"
+        />,
+      role: 'Cluster Owner'
+    }
+  ];
+
+  const members_columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+    }
+  ];
+
+  const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+  };
+
   return (
+
     <form className="Add_Cluster_Form">
+      <FormGroupContainer horizontal>
+        <h2>Add Cluster - Custom</h2>
+      </FormGroupContainer>
+      <Divider margin />
       <FormGroupContainer>
         <FormGroupContainer horizontal>
           <FormGroup>
@@ -36,17 +183,70 @@ const AddCustom = (props) => {
             expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
             className="site-collapse-custom-collapse"
           >
-            <Panel header="Member Roles" key="1">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Member Roles"
+                  description="Control who has access to the cluster and what permission they have to change it."
+                />
+              }
+              key="1"
+            >
+              <Table
+                dataSource={members_data}
+                columns={members_columns}
+                pagination={false}
+                className="members_table" />
+              <Button primary>
+                <Icon mr>
+                  add
+                </Icon>
+                Add Member
+              </Button>
             </Panel>
-            <Panel header="Labels & Annotations" key="2">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Labels & Annotations"
+                  description="Control who has access to the cluster and what permission they have to change it."
+                />
+              }
+              key="2"
+            >
+              <ContainerHorizontal>
+                <div style={{ flexBasis: '50%', paddingRight: '20px' }}>
+                  <p>Labels</p>
+                  {labels}
+                  {labelArray.length > 0 ?
+                    <p className="propTip">ProTip: Paste one or more lines of key=value pairs into any key field for easy bulk entry.</p>
+                    : null}
+                  <Button primary onClick={handleAddLabel}>
+                    <Icon mr>
+                      add
+                    </Icon>
+                    Add Label
+                  </Button>
+                </div>
+                <div style={{ flexBasis: '50%', paddingLeft: '20px' }}>
+                  <p>Annotations</p>
+                  {annotations}
+                  {annotationArray.length > 0 ?
+                    <p className="propTip">ProTip: Paste one or more lines of key=value pairs into any key field for easy bulk entry.</p>
+                    : null}
+                  <Button primary onClick={handleAddAnnotation}>
+                    <Icon mr>
+                      add
+                    </Icon>
+                    Add Annotation
+                  </Button>
+                </div>
+              </ContainerHorizontal>
             </Panel>
           </Collapse>
         </FormGroupContainer>
         <FormGroupContainer horizontal>
           <h2>Cluster Options</h2>
-          <Button primary sm className="sm_button">
+          <Button type="primary" sm className="sm_button">
             Edit as YAML
             <Icon ml>
               attachment
@@ -61,26 +261,352 @@ const AddCustom = (props) => {
             expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
             className="site-collapse-custom-collapse"
           >
-            <Panel header="Kubernetes Options" key="1">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Kubernetes Options"
+                  description="Customize the kubernetes cluster options"
+                />
+              }
+              key="1"
+            >
+              <FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Kubernetes Version</p>
+                    <Select defaultValue="v1.18.8" style={{ width: "50%" }} onChange={handleChange}>
+                      <Option value="v1.18.8">v1.18.8-rancher1-1</Option>
+                      <Option value="v1.17.11">v1.17.11-rancher1-1</Option>
+                      <Option value="v1.16.15">v1.16.15-rancher1-1</Option>
+                      <Option value="v1.15.12">v1.15.12-rancher2-5</Option>
+                    </Select>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Network Provider</p>
+                    <Select defaultValue="canal" style={{ width: "100%" }} onChange={handleChange}>
+                      <Option value="flannel">Flannel</Option>
+                      <Option value="calico">Calico</Option>
+                      <Option value="canal">Canal(Network Isolation Available)</Option>
+                      <Option value="weave">Weave</Option>
+                    </Select>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Windows Support</p>
+                    <Radio.Group onChange={handleChange} defaultValue={2}>
+                      <Radio style={radioStyle} value={1} disabled={true}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2} disabled={true}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                    <p>Available for Kubernetes 1.15 or above with Flannel network provider</p>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Project Network Isolation</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal >
+                  <FormGroup style={{ maxWidth: "32%" }}>
+                    <p>CNI Plugin MTU Override</p>
+                    <InputNumber defaultValue={0} placeholder="e.g. 1500" style={{ width: "100%" }} />
+                    <p className="sm_text">Only applied if the value is non-zero. When applied, the MTU value is explicitly configured for the chosen network provider (disabling auto-discovery). The override must be calculated from the host's MTU minus the CNI plugin's required overhead.</p>
+                  </FormGroup>
+                </FormGroupContainer>
+                <p>Cloud Provider
+                  <Tooltip placement="topLeft" title={<span>Read more about the <a style={{ color: "white", textDecoration: "underline" }} target="blank" href="https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/">Kubernetes cloud providers</a></span>}>
+                    <QuestionCircleOutlined className="text_icon" />
+                  </Tooltip>
+                </p>
+                <Alert message={<span>If your cloud provider is not listed, please use the <b>Custom</b> option.</span>} type="info" showIcon />
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        None
+                    </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Amazon
+                    </Radio>
+                      <Radio style={radioStyle} value={3}>
+                        Azure
+                    </Radio>
+                      <Radio style={radioStyle} value={4}>
+                        Custom
+                    </Radio>
+                      <Radio style={radioStyle} value={5}>
+                        External
+                    </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                </FormGroupContainer>
+              </FormGroupContainer>
             </Panel>
-            <Panel header="Private Registry" key="2">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Private Registry"
+                  description="Configure a default private registry for this cluster. When enabled, all images required for cluster provisioning and system add-ons startup will be pulled from this registry."
+                />
+              }
+              key="2"
+            >
+              <FormGroupContainer horizontal>
+                <FormGroup>
+                  <p>Private Registry</p>
+                  <Radio.Group onChange={handleChange} defaultValue={1}>
+                    <Radio style={radioStyle} value={1}>
+                      Disabled
+                    </Radio>
+                    <Radio style={radioStyle} value={2}>
+                      Enabled
+                    </Radio>
+                  </Radio.Group>
+                </FormGroup>
+              </FormGroupContainer>
             </Panel>
-            <Panel header="Advanced Options" key="3">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Advanced Options"
+                  description="Customize advanced cluster options"
+                />
+              }
+              key="3"
+            >
+              <FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Nginx Ingress</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Node Port Range</p>
+                    <Input placeholder="e.g. 30000-32767" />
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Metrics Server Monitoring</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Pod Security Policy Support</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Default Pod Security Policy *</p>
+                    <Select defaultValue="unrestricted" style={{ width: "100%" }} onChange={handleChange}>
+                      <Option value="selectPod">Select a Pod Security Policy...</Option>
+                      <Option value="restricted">restricted</Option>
+                      <Option value="unrestricted">unrestricted</Option>
+                    </Select>
+                  </FormGroup>
+                  <FormGroup>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Docker version on nodes</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Require a supported Docker version
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Aloow unsupported versions
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Docker Root Directory</p>
+                    <Input value="/var/lib/docker" placeholder="Default directory is /var/lib/docker" />
+                  </FormGroup>
+                  <FormGroup>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>etcd Snapshot Backup Target</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        local
+                      </Radio>
+                      <p className="sm_text">snapshots only exist locally, no external backups are performed</p>
+                      <Radio style={radioStyle} value={2}>
+                        s3
+                      </Radio>
+                      <p className="sm_text">etcd snapshots will occur locally, subsequently the snapshot will be backed up to the configured s3 target</p>
+                    </Radio.Group>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Recurring etcd Snapshot Enabled</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio value={1}>
+                        Yes
+                      </Radio>
+                      <Radio value={2}>
+                        No
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Recurring etcd Snapshot Interval</p>
+                    <Input type="number" addonAfter="hours" defaultValue={12} placeholder="e.g. 6" />
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Recurring etcd Snapshot Retention</p>
+                    <Input type="number" addonBefore="Keep the last" defaultValue={6} placeholder="e.g. 12" />
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Scheduled CIS Scan Enabled</p>
+                    <Radio.Group onChange={handleChange} defaultValue={2}>
+                      <Radio value={1}>
+                        Yes
+                      </Radio>
+                      <Radio value={2}>
+                        No
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Scheduled CIS Scan Profile</p>
+                    <Select defaultValue="1" style={{ width: "100%" }} onChange={handleChange}>
+                      <Option value="1">RKE-CIS-1.5 Permissive</Option>
+                      <Option value="2">RKE-CIS-1.5 Hardened</Option>
+                    </Select>
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Scheduled CIS Scan Interval(cron)</p>
+                    <Input addonBefore="Keep the last" defaultValue="0 0 * * *" placeholder="e.g. 10 0 * * *" />
+                  </FormGroup>
+                  <FormGroup>
+                    <p>Scheduled CIS Scan Report Retention</p>
+                    <Input type="number" addonBefore="Keep the last" defaultValue={12} placeholder="e.g. 12" />
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Maximum Worker Nodes Unavailable</p>
+                    <Input
+                      type="number"
+                      addonAfter={
+                        <Select defaultValue="percentage" className="select-after">
+                          <Option value="percentage">Percentage</Option>
+                          <Option value="count">Count</Option>
+                        </Select>
+                      }
+                      defaultValue={10}
+                      placeholder="e.g. 6" />
+                  </FormGroup>
+                  <FormGroup></FormGroup>
+                  <FormGroup></FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Drain nodes</p>
+                    <Radio.Group onChange={handleChange} defaultValue={2}>
+                      <Radio value={1}>
+                        Yes
+                      </Radio>
+                      <Radio value={2}>
+                        No
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+
+                </FormGroupContainer>
+              </FormGroupContainer>
             </Panel>
-            <Panel header="Authorized Endpoint" key="4">
-              <p>{text}</p>
+            <Panel
+              header={
+                <CollapseHeader
+                  title="Authorized Endpoint"
+                  description="Enabling the authorized cluster endpoint allows direct communication with the cluster, bypassing the API proxy. Authorized endpoints can be retrieved by generating a kubeconfig for the cluster."
+                />
+              }
+              key="4"
+            >
+              <FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>Authorized Cluster Endpoint</p>
+                    <Radio.Group onChange={handleChange} defaultValue={1}>
+                      <Radio style={radioStyle} value={1}>
+                        Enabled
+                      </Radio>
+                      <Radio style={radioStyle} value={2}>
+                        Disabled
+                      </Radio>
+                    </Radio.Group>
+                  </FormGroup>
+                </FormGroupContainer>
+                <FormGroupContainer horizontal>
+                  <FormGroup>
+                    <p>FQDN</p>
+                    <Input placeholder="dev.example.com" />
+                  </FormGroup>
+                  <FormGroup>
+                    <p>CA Certificate
+                      <Tooltip placement="topLeft" title={<span className="sm_text">The CA certificate will be placed in the generated kubeconfig file(s) to validate the certificate (chain) presented by the load balancer which you have configured at the provided FQDN. <a style={{ color: "white", textDecoration: "underline" }} target="blank" href="https://rancher.com/docs/rancher/v2.x/en/cluster-provisioning/rke-clusters/options/#authorized-cluster-endpoint">More info here.</a></span>}>
+                        <QuestionCircleOutlined className="text_icon" />
+                      </Tooltip>
+                    </p>
+                    <div className="UploadContainer">
+                      <Upload>
+                        <Button type="primary" icon={<UploadOutlined />}>Read from a file</Button>
+                      </Upload>
+                      <Divider style={{marginTop: "10px", marginBottom: "10px"}} />
+                      <TextArea
+                        placeholder="Paste in the CA certificate, starting with -----BEGIN CERTIFICATE-----"
+                      />
+                    </div>
+                  </FormGroup>
+                </FormGroupContainer>
+              </FormGroupContainer>
             </Panel>
           </Collapse>
         </FormGroupContainer>
-        <FormGroupContainer horizontal>
+        <FormGroupContainer style={{marginBottom: "100px"}} horizontal>
           <div></div>
-          <Button className="sm_button" primary>
+          <Button className="sm_button" type="primary" >
             Next
           </Button>
-          <Button className="sm_button" transparent>
+          <Button className="sm_button" transparent onClick={props.handleCancelAction}>
             Cancel
           </Button>
           <div></div>

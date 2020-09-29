@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import cookies from "react-cookies";
 import {
-  Button, Dropdown, DropdownItem, DropdownButtonProps, ScrollArea, Modal, ContainerHorizontal
+   Dropdown, DropdownItem, DropdownButtonProps, ScrollArea, Modal, ContainerHorizontal
 } from "@duik/it";
 import Icon from '@duik/icon'
-import { Table, Space, Tooltip } from 'antd';
-import { MoreOutlined, DeleteOutlined, EditOutlined, DeleteFilled } from '@ant-design/icons';
+import { Table, Space, Tooltip, Button } from 'antd';
+import { MoreOutlined, DeleteOutlined, EditOutlined, DeleteFilled, PlusOutlined } from '@ant-design/icons';
 
 import {Blue_gear, Blue_upload, AmazonEC2, Azure, DigitalOcean, vSphere, AmazonEKS, AzureAKS, GoogleGKE} from '../../../assets/img/ui/providers/providers'
 import CustomButton from '../../../components/CustomButton';
@@ -143,6 +143,10 @@ const ClusterList = (props) => {
     handleCloseModal();
   }
 
+  const handleBackToClusterList = () =>{
+    setPageType("List");
+  }
+
 
   return (
     <>
@@ -151,15 +155,18 @@ const ClusterList = (props) => {
           <div className="ClusterList_container" style={{ flexBasis: '100%' }}>
             <ScrollArea>
               <div className="action_top_bar">
-                <Button className="delete_action_btn" secondary>
+                <Button className="delete_action_btn" danger type="default">
                   Delete
                     <DeleteOutlined ml="true" />
                 </Button>
-                <Button className="add_action_btn" success onClick={handleOpenModal}>
+                {/* <Button className="add_action_btn" primary onClick={handleOpenModal}>
                   <Icon mr>
                     plus_rounded
                     </Icon>
                     Add Cluster
+                </Button> */}
+                <Button className="add_action_btn" type="primary" shape="round" icon={<PlusOutlined />} onClick={handleOpenModal}>
+                  Add Cluster
                 </Button>
               </div>
               <Table
@@ -175,6 +182,7 @@ const ClusterList = (props) => {
           : pageType == "Add" ?
             <AddCluster 
               addType = {addType}
+              handleCancelAction = {handleBackToClusterList}
             />
             : null
       }

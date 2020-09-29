@@ -11,16 +11,11 @@ const AddCluster = (props) => {
   const [addStep, setAddStep] = useState("create");
   return (
     <>
-      <TopBar>
-        <TopBarSection>
-          <TopBarTitle>
-            Add Cluster - {addType}
-          </TopBarTitle>
-        </TopBarSection>
-      </TopBar>
       {
         addType == 'Custom' ?
-          <AddCustom />
+          <AddCustom
+            handleCancelAction = {props.handleCancelAction}
+          />
           : addType == "Import" ?
             <AddImport />
             : addType == "AmazonEC2" ?

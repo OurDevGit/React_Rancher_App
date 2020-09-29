@@ -5,12 +5,15 @@
         padding: 20px 50px 0;
         .delete_action_btn{
             float: left;
-            .anticon-delete{
-                margin-left: 3px;
+            .anticon{
+                vertical-align: middle;
             }
         }
         .add_action_btn{
             float: right;
+            .anticon{
+                vertical-align: middle;
+            }
         }
     }
     .ClusterList{
