@@ -34,7 +34,6 @@ const Login = (props) => {
   const [error, setError] = useState(null);
 
   const onFinish = async (values) => {
-    console.log("Received values of form: ", values);
     setIsLoadingLogin(true);
     await dispatch(userLoginRequest(loginLink, values));
     setIsLoading(true);
@@ -60,7 +59,7 @@ const Login = (props) => {
     if (isLoginSuccess) {
       setIsLoading(false);
       setError(null);
-      props.history.push("/Dashboard");
+      props.history.push("/g");
     }
   }, [isLoginSuccess]);
 

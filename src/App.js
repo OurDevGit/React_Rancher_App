@@ -11,9 +11,10 @@ import { loadMe } from "./actions/user";
 import { loadLocales } from "./actions/language";
 
 import Login from "./containers/Auth/Login";
-import Dashboard from "./containers/Dashboard";
+import Global from "./containers/Global";
 import Apps from "./containers/Apps";
 import Settings from "./containers/Settings";
+import Cluster from "./containers/Cluster"
 
 import "./styles/index.scss";
 import "@duik/it/dist/styles.css";
@@ -32,8 +33,9 @@ const App = () => {
     <Router>
       <div className="app">
         <Switch>
-          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/g" component={Global} />
           <Route path="/login" component={Login} />
+          <Route path="/c/:id" component={Cluster} />
           <Route path="/apps" component={Apps} />
           <Route path="/settings" component={Settings} />
           <Redirect to="/login" />

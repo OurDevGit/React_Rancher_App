@@ -1,0 +1,13 @@
+.mobileNavigation {
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  flex-shrink: 0;
+  @media screen and (min-width: 769px) {
+    display: none !important;
+  }
+  .mobileItem {
+    justify-content: center;
+    flex-grow: 1;
+  }
+}

@@ -1,0 +1,128 @@
+.Add_Cluster_Form{
+    padding: 30px;
+    .ant-collapse-borderless>.ant-collapse-item{
+        box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.15);
+        transition: box-shadow 0.3s ease-in-out;
+        margin-bottom: 20px;
+        border-radius: 5px !important;
+        background-color: white;
+    }
+    .ant-collapse-borderless>.ant-collapse-item:hover{
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .ant-collapse-borderless>.ant-collapse-item>.ant-collapse-content{
+        background-color: white;
+        padding: 20px;
+        .members_table{
+            padding: 0 0 20px;
+        }
+    }
+    .sm_button{
+        max-width: 100px;
+    }
+    .mm_button{
+        max-width: 200px;
+    }
+    .lm_button{
+        max-width: 300px;
+    }
+    .collapse_header{
+        .collapse_header_description{
+            margin: 0;
+        }
+    }
+    .propTip{
+        font-style: italic;
+        color: deepskyblue;
+    }
+    .inputGroups{
+        .minus_button{
+            min-width: 40px;
+            max-width: 40px;
+        }
+        .equal{
+            min-width: 10px;
+            max-width: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .equal.first{
+            margin-top: 45px;
+        }
+        .minus_button.first{
+            margin-top: 35px;
+        }
+    }
+    .sm_text{
+        font-size: 12px;
+        line-height: 15px;
+    }
+    .text_icon{
+        color: var(--primary);
+        padding-left: 5px;
+        vertical-align: text-top;
+    }
+    .ant-input-group-wrapper{
+        margin:0;
+    }
+    .UploadContainer{
+        text-align: left;
+        padding: 20px;
+        background: #f2f5f5;
+        margin: 0;
+        .upload_btn{
+            text-align: right;
+        }
+    }
+    .OptionContainer:first-child::before{
+        content: "1";
+    }
+    .OptionContainer::before{
+        content: "2";
+        position: absolute;
+        left: -14.5px;
+        width: 25px;
+        height: 25px;
+        line-height: 26px;
+        margin-right: 8px;
+        border-radius: 50%;
+        text-align: center;
+        background: #78c9cf;
+    color: #fff;
+    }
+    .OptionContainer{
+        position: relative;
+        margin-left: 50px;
+        margin-bottom: 50px;
+        background: #f2f5f5;
+        padding: 20px 40px;
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.15);
+        .ant-col{
+            text-align: center;
+        }
+    }
+    .Clipboard{
+        display: flex;
+        p{
+            margin: 0 !important;
+            button{
+                width: 50px;
+                height: 100%;
+            }
+        }
+    }
+    .ant-input[disabled].CommandTextArea{
+        background: #454545;
+        color: #78c9cf;
+        resize: none;
+    }
+}
+.checkbox_col{
+    text-align: center;
+}
+code{
+    font-size: 85% !important;
+    color: #27aa5e !important;
+    background-color: #454545 !important;
+    border-radius: 2px !important;
+}

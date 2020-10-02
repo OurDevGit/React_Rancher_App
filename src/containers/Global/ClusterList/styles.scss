@@ -1,0 +1,86 @@
+.ClusterList_container{
+    background: #F5F6FA;
+    .action_top_bar{
+        min-height: 50px;
+        padding: 20px 50px 0;
+        .delete_action_btn{
+            float: left;
+            .anticon{
+                vertical-align: middle;
+            }
+        }
+        .add_action_btn{
+            float: right;
+            .anticon{
+                vertical-align: middle;
+            }
+        }
+    }
+    .ClusterList{
+        padding: 30px;
+        .cluster_state{
+            padding: 2px 0;
+            max-width: 85px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            &.process{
+                background-color: #F6AB2F;
+            }
+            &.success{
+                background-color: var(--success);
+            }
+            &.reject{
+                background-color: #9EA0A5;
+            }
+        }
+        .cluster_name{
+            color: var(--primary)
+        }
+        .anticon{
+            cursor: pointer;
+        }
+        .anticon:hover{
+            color: var(--primary);
+        }
+        
+    }
+    .more_dropdown_menu{
+        
+        .dropdown-menu.show{
+            min-width: 185px;
+            .btn.dropdown-item i{
+                position: absolute !important;
+                right: 20px;
+            }
+        }
+        
+    }
+}
+.add_modal{
+
+  .add_modal_body{
+    padding: 100px 30px;
+  }
+    .mainType{
+        display: flex;
+        .customButton{
+            width: 100%;
+            display: flex;
+        }
+    }
+    .providerType{
+      display: block !important;
+      min-height: 120px;
+      margin-top: 50px;
+      p{
+        margin: 10px;
+      }
+      .customButton{
+        width: 200px;
+        float: left;
+      } 
+    }
+}
