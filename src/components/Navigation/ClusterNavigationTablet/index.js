@@ -40,46 +40,55 @@ import "./styles.scss";
 
 import logoImg from "../../../assets/img/DeltaDevOps.png";
 
-const security_submenu = [
+const storage_submenu = [
   {
-    text: "Users",
+    text: "Persistent Volumes",
     icon: <TeamOutlined />,
     isDropdown: false,
   },
   {
-    text: "Groups",
+    text: "Storage Classes",
     icon: <GroupOutlined />,
-    isDropdown: false,
-  },
-  {
-    text: "Roles",
-    icon: <SolutionOutlined />,
-    isDropdown: false,
-  },
-  {
-    text: "Pod Security Policies",
-    icon: <FileProtectOutlined />,
-    isDropdown: false,
-  },
-  {
-    text: "Authentication",
-    icon: <KeyOutlined />,
     isDropdown: false,
   }
 ];
 const tools_submenu = [
+  {
+    text: "Alets",
+    icon: <BookOutlined />,
+    isDropdown: false,
+  },
+  {
+    text: "Snapshots",
+    icon: <BookOutlined />,
+    isDropdown: false,
+  },
   {
     text: "Catalogs",
     icon: <BookOutlined />,
     isDropdown: false,
   },
   {
-    text: "Drivers",
+    text: "Notifiers",
     icon: <NodeIndexOutlined />,
     isDropdown: false,
   },
   {
-    text: "RKE Templates",
+    text: "Logging",
+    icon: <FileOutlined />,
+    isDropdown: false,
+  },{
+    text: "Monitoring",
+    icon: <FileOutlined />,
+    isDropdown: false,
+  },
+  {
+    text: "Istio",
+    icon: <FileOutlined />,
+    isDropdown: false,
+  },
+  {
+    text: "CIS Scans",
     icon: <FileOutlined />,
     isDropdown: false,
   }
@@ -94,32 +103,39 @@ const menuLinks = [
     submenu: null
   },
   {
-    text: "Clusters",
-    to: "/g",
+    text: "Cluster",
+    to: "/c",
     icon: <ClusterOutlined />,
     isDropdown: false,
     submenu: null
   },
   {
-    text: "Apps",
-    to: "/apps",
+    text: "Nodes",
+    to: "/nodes",
     icon: <AppstoreOutlined />,
     isDropdown: false,
     submenu: null
   },
   {
-    text: "Settings",
+    text: "Storage",
     to: "/settings",
     icon: <SettingOutlined />,
+    isDropdown: true,
+    submenu: storage_submenu
+  },
+  {
+    text: "Projects/Namespaces",
+    to: "",
+    icon: <SecurityScanOutlined />,
     isDropdown: false,
     submenu: null
   },
   {
-    text: "Security",
+    text: "Members",
     to: "",
-    icon: <SecurityScanOutlined />,
-    isDropdown: true,
-    submenu: security_submenu
+    icon: <ToolOutlined />,
+    isDropdown: false,
+    submenu: null
   },
   {
     text: "Tools",
@@ -129,7 +145,7 @@ const menuLinks = [
     submenu: tools_submenu
   },
 ];
-const Navigation = (props) => {
+const ClusterNavigation = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
   const [currentItem, setCurrentItem] = useState(props.active);
@@ -282,4 +298,4 @@ const Navigation = (props) => {
   );
 };
 
-export default Navigation;
+export default ClusterNavigation;

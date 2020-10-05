@@ -11,7 +11,7 @@ import {
 } from "@duik/it";
 
 import Header from "../../components/Header";
-import NavigationTablet from "../../components/Navigation/NavigationTablet";
+import ClusterNavigationTablet from "../../components/Navigation/ClusterNavigationTablet";
 import TopBarMobile from "../../components/Header/TopBarMobile";
 import EditCluster from "./EditCluster"
 import {
@@ -71,7 +71,7 @@ const Cluster = (props) => {
 
   return (
     <ContainerHorizontal>
-      <NavigationTablet active="Clusters" />
+      <ClusterNavigationTablet active="Clusters" />
       <ContainerVertical>
         <TopBarMobile />
         <TabContainer className="mobileNavigation">

@@ -1,0 +1,44 @@
+.navigation-wrapper {
+  display: none;
+
+  .navigation-topbar {
+    justify-content: center;
+  }
+  .navigation-logo {
+    img {
+      height: 48px;
+    }
+  }
+  .navigation-footer{
+    text-align: center;
+  }
+
+  .submenu{
+    &.show{
+      display: block;
+    }
+    display: none;
+    a{
+      padding-left: 50px;
+    }
+    a:not(:last-child){
+      border: 0;
+    }
+    
+  }
+  @media screen and (min-width: 769px) {
+    display: block;
+  }
+}
+.version-modal {
+  .modal-header {
+    color: #8B959C;
+    font-size: .85em;
+  }
+  .ant-row {
+    padding: 5px;
+    a {
+      color: var(--primary);
+    }
+  }
+}
