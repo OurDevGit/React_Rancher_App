@@ -97,7 +97,6 @@ const AddCustom = (props) => {
   }, [user]);
 
   useEffect(() => {
-    console.log("aaaaaaaa", labelArray)
     const labels_temp = labelArray.map((label, index) =>
       <InputGroups
         key={index.toString()}
